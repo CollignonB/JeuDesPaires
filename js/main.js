@@ -1,5 +1,7 @@
-let divRow = document.getElementById("divRow");
 let main = document.getElementsByTagName("main")[0];
+let divRow = document.createElement("div");
+divRow.classList.add("row");
+main.appendChild(divRow);
 let nbCards = 12;
 let compareTable = [];
 let colorTable = [
@@ -19,14 +21,21 @@ let colorTable = [
 let table = [];
 let pairs = 0;
 
-for (let i = 0; i < nbCards; i++){
-    let cardC = document.createElement("div");   
-    cardC.classList.add("col-3","col-sm-4","col-lg-2");
-    let card = document.createElement("div");
-    card.classList.add("playingCard","baseColor");
+function createCards () {
 
-    cardC.appendChild(card);
-    divRow.appendChild(cardC);
+    let divRow = document.createElement("div");
+    divRow.classList.add("row");
+    main.appendChild(divRow);
+
+    for (let i = 0; i < nbCards; i++){
+        let cardC = document.createElement("div");   
+        cardC.classList.add("col-3","col-sm-4","col-lg-2");
+        let card = document.createElement("div");
+        card.classList.add("playingCard","baseColor");
+    
+        cardC.appendChild(card);
+        divRow.appendChild(cardC);
+    }
 }
 
 function shuffle(tab) {
@@ -46,8 +55,8 @@ function shuffle(tab) {
     return tab;
 }
 
-
 function resetCard (table){
+
     table[0].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
     table[1].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
     
@@ -84,33 +93,50 @@ function checkCards (compareTable, table) {
    return [compareTable,table,pairOfCards];
 }
 
-let nbPlayingCards = document.getElementsByClassName("playingCard");
-let randomColor = shuffle(colorTable);
-
-
-
-for (let i = 0; i < nbPlayingCards.length; i++){
-    nbPlayingCards[i].addEventListener("click", function() {
-        this.classList.add(randomColor[i]);
-        compareTable.push(randomColor[i]);
-        table.push(this);
-        main.style.pointerEvents = "none";
-        setTimeout(function(){
-            [compareTable,table,pairOfCards] = checkCards(compareTable,table);
-            pairs += pairOfCards;
-            console.log("Za Warudo!!!");
-            console.log(pairs);
-            main.style.pointerEvents = "auto";  
-            if (pairs === nbCards/2){
-                console.log("j'ai gagné");
-                let replay = confirm("GG, voulez-vous rejouer ?");
-                if(replay){
-                    document.location.reload(true);
-                }else {
-                    alert("aurevoir");
-                }
-            }            
-        }, 2000);     
-    });
-
+function endGame(msg) {
+    let replay = confirm(msg);
+    if(replay){
+        document.location.reload(true);
+    }else {
+        alert("aurevoir");
+    }
 }
+
+function play() {
+
+    let startBtn = document.getElementById("start");
+    startBtn.remove();
+    var nbCoups = 20;
+    let life = document.createElement("div");
+    main.appendChild(life);
+
+    createCards();
+
+    let nbPlayingCards = document.getElementsByClassName("playingCard");
+    let randomColor = shuffle(colorTable);
+
+    for (let i = 0; i < nbPlayingCards.length; i++){
+        life.innerHTML = `Nombre de coups restant : ${nbCoups}`;
+        nbPlayingCards[i].addEventListener("click", function() {
+            nbCoups--;
+            life.innerHTML = `Nombre de coups restant : ${nbCoups}`;
+            this.classList.add(randomColor[i]);
+            compareTable.push(randomColor[i]);
+            table.push(this);
+            main.style.pointerEvents = "none";
+            setTimeout(function(){
+                [compareTable,table,pairOfCards] = checkCards(compareTable,table);
+                pairs += pairOfCards;
+                main.style.pointerEvents = "auto";  
+                if (pairs === nbCards/2){
+                    endGame("GG, voulez-vous rejouer ?")
+                }else if (nbCoups === 0) {
+                    endGame("Dommage voaus avez perdu, voulez-vous rejouer ?")
+                }         
+            }, 1000);     
+        });
+    }
+}
+
+
+// play();

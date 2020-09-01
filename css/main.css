@@ -95,9 +95,30 @@ textarea {
      height: 150px;
      margin: 1em 0;
      border-radius: 10px;
-     background-color: crimson;
      border: solid 3px white;
      
+   }
+
+   .baseColor {
+    background-color: crimson;
+   }
+   .colorOne{
+     background-color: pink;
+   }
+   .colorTwo{
+     background-color: purple;
+   }
+   .colorThree{
+     background-color: cyan;
+   }
+   .colorFour{
+     background-color: darkblue;
+   }
+   .colorFive{
+     background-color: olive;
+   }
+   .colorSix{
+     background-color: orangered;
    }
 /* ==========================================================================
    Helper classes

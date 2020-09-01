@@ -95,31 +95,86 @@ textarea {
      height: 150px;
      margin: 1em 0;
      border-radius: 10px;
-     border: solid 3px white;
-     
+     animation: mymove 3s ; 
    }
 
    .baseColor {
     background-color: crimson;
+    
    }
    .colorOne{
      background-color: pink;
+     animation: moveCOne 1s;
    }
    .colorTwo{
      background-color: purple;
+     animation: moveCTwo 1s;
    }
    .colorThree{
      background-color: cyan;
+     animation: moveCThree 1s;
    }
    .colorFour{
      background-color: darkblue;
+     animation: moveCFour 1s;
    }
    .colorFive{
      background-color: olive;
+     animation: moveCFive 1s;
    }
    .colorSix{
-     background-color: orangered;
+     background-color: yellow;
+     animation: moveCSix 1s;
    }
+
+   /* .colorOne.clicked {
+     transition: background-color 1000ms ease-in;
+   }
+   .colorTwo.clicked {
+    transition: background-color 1000ms ease-in;
+  }
+  .colorThree.clicked {
+    transition: background-color 1000ms ease-in;
+  }
+  .colorFour.clicked {
+    transition: background-color 1000ms ease-in;
+  }
+  .colorFive.clicked {
+    transition: background-color 1000ms ease-in;
+  }
+  .colorSix.clicked {
+    transition: background-color 1000ms ease-in;
+  } */
+
+  @keyframes mymove {
+    from {background-color: white;}
+    to {background-color: crimson;}
+  }
+  @keyframes moveCOne {
+    from {background-color: crimson;}
+    to {background-color: pink;}
+  }
+
+  @keyframes moveCTwo {
+    from {background-color: crimson;}
+    to {background-color: purple;}
+  }
+  @keyframes moveCThree {
+    from {background-color: crimson;}
+    to {background-color: cyan;}
+  }
+  @keyframes moveCFour {
+    from {background-color: crimson;}
+    to {background-color: darkblue;}
+  }
+  @keyframes moveCFive {
+    from {background-color: crimson;}
+    to {background-color: olive;}
+  }
+  @keyframes moveCSix {
+    from {background-color: crimson;}
+    to {background-color: yellow;}
+  }
 /* ==========================================================================
    Helper classes
    ========================================================================== */

@@ -137,6 +137,3 @@ function play() {
         });
     }
 }
-
-
-// play();

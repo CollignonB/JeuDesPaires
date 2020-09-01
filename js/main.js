@@ -47,9 +47,20 @@ let randomColor = shuffle(colorTable);
 
 let nbPlayingCards = document.getElementsByClassName("playingCard");
 
-// for (let i = 0; i < nbPlayingCards.length; i++){
-//     nbPlayingCards[i].classList.add(randomColor[i]);
-// }
+function checkCards (compareTable, table) {
+    if (compareTable.length === 2 ){
+        if (compareTable[0] !== compareTable[1]){
+            table[0].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
+            table[1].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
+            
+            table[0].classList.add("baseColor");
+            table[1].classList.add("baseColor");
+        }
+        compareTable = [];
+        table = [];
+   }
+   return [compareTable,table];
+}
 
 console.log(randomColor);
 
@@ -61,26 +72,13 @@ for (let i = 0; i < nbPlayingCards.length; i++){
         compareTable.push(randomColor[i]);
 
         table.push(this);
-
-        if (compareTable.length === 2 ){
-            if (compareTable[0] === compareTable[1]){
-                compareTable = [];
-                table = [];
-            } else {
-                table[0].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
-                table[1].classList.remove("colorOne", "colorTwo", "colorThree", "colorFour", "colorFive", "colorSix");
-                
-                table[0].classList.add("baseColor");
-                table[1].classList.add("baseColor");
-                
-                compareTable = [];
-                table = [];
-            }
-        }
+        setTimeout(function(){
+            [compareTable,table] = checkCards(compareTable,table);
+        }, 2000);
     });
     
 }
-
+// compareTable[0] === compareTable[1]
 
 
 // console.log(shuffle(colorTable));

@@ -2,7 +2,7 @@ let main = document.getElementsByTagName("main")[0];
 let divRow = document.createElement("div");
 divRow.classList.add("row");
 main.appendChild(divRow);
-let nbCards = 12;
+let nbCards;
 let compareTable = [];
 let colorTable = [
     "colorOne",
@@ -15,12 +15,6 @@ let colorTable = [
 let tableToShuffle = [];
 let table = [];
 let pairs = 0;
-
-
-for (let i = 0; i < nbCards/2; i ++){
-    tableToShuffle.push(colorTable[i]);
-    tableToShuffle.push(colorTable[i]);
-}
 
 function diplayDifficultyMenu(){
 
@@ -65,66 +59,69 @@ function diplayDifficultyMenu(){
     divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> </div>';
     dRow.appendChild(divNumber);
 
-    // document.getElementById("nbCoups").disabled = true;
-    // document.getElementById("nbCards").disabled = true;
+    document.getElementById("nbCoups").disabled = true;
+    document.getElementById("nbCards").disabled = true;
 
     let btn = document.createElement("button");
     dRow.appendChild(btn);
     btn.classList.add("btn", "btn-outline-danger", "col-12", "col-sm-10", "col-lg-6");
     btn.id = "play";
-
-    btn.onclick = play;
     btn.innerText = "Jouer";
 
-    chooseDifficulty();
+    let [nbCard,nbCoup] = chooseDifficulty();
+
+    console.log(nbCard);
+
+    btn.addEventListener("click", function(){
+        play(nbCoup,nbCard);
+    }); 
 }
 
 function chooseDifficulty(){
-    let easy = document.getElementById("easy");
-    let normal = document.getElementById("normal");
-    let hard = document.getElementById("hard");
-    let custom = document.getElementById("custom");
-
     let radios = document.getElementsByName("difficulty");
 
     let nbCoups = document.getElementById("nbCoups");
     let nbCards = document.getElementById("nbCards");
 
-    console.log(radios);
+    // nbCoups.value = "20";
+    // nbCards.value = "12";
 
     for (let radio of radios){
         radio.addEventListener('click', function(){
-            nbCards.value = "12";
-            nbCoups.value = "20";
-            console.log(this.id);
+            
+            if(this.id === "easy"){
+                nbCards.disabled = true;
+                nbCoups.disabled = true;
+                nbCards.value = "10";
+                nbCoups.value = "20";
+            }
+            if(this.id === "normal"){
+                nbCards.disabled = true;
+                nbCoups.disabled = true;
+                nbCards.value = "12";
+                nbCoups.value = "20";
+            }
+            if (this.id === "hard"){
+                nbCards.disabled = true;
+                nbCoups.disabled = true;
+                nbCards.value = "12";
+                nbCoups.value = "16";
+            }
+            if(this.id === "custom"){
+                nbCards.disabled = false;
+                nbCoups.disabled = false;
+            }
+            // console.log("nb cartes diffi choice :" +nbCards.value);
+            // console.log("nb coups diffi choice :" +nbCoups.value);
         });
     }
-    // for (let i=0; i<radios.length; i++ ){
-    //     easy.addEventListener('change', function() {
-    //         if(this.checked === true){
-    //             nbCoups.value = 20;
-    //             nbCards.value = 10;
-    //         }else {
-    //             nbCoups.value = 16;
-    //             nbCards.value = 12;
-    //         }
-    //     });
-    //     normal.addEventListener('change', function() {
-    //         if(this.checked === true){
-    //             nbCoups.value = 16;
-    //             nbCards.value = 12;
-    //         }
-    //     });
-    //     hard.addEventListener('change', function(){
-    //         if(this.checked === true){
-    //             nbCoups.value = 16;
-    //             nbCards.value = 14;
-    //         }
-    //     });
-    // }
-}
-function createCards () {
 
+    return [nbCards.value,nbCoups.value];
+}
+
+function createCards (nbCards) {
+
+    console.log("je vais créé les cartes");
     let divRow = document.createElement("div");
     divRow.classList.add("row");
     main.appendChild(divRow);
@@ -134,10 +131,13 @@ function createCards () {
         cardC.classList.add("col-3","col-sm-4","col-lg-2");
         let card = document.createElement("div");
         card.classList.add("playingCard","baseColor");
+
+        console.log("je viens de créer "+ i +" cartes")
     
         cardC.appendChild(card);
         divRow.appendChild(cardC);
     }
+    console.log("j'ai créé les cartes");
 }
 
 function shuffle(tab) {
@@ -204,26 +204,28 @@ function endGame(msg) {
     }
 }
 
-function play() {
+function play(nbCoup,nbCard) {
 
+    console.log("nombre de coups : "+nbCoup);
+    console.log("nombre de cartes : "+nbCard);
     let startBtn = document.getElementById("play");
     startBtn.remove();
     let dRow = document.getElementById("dRow");
     dRow.remove();
-    var nbCoups = 20;
     let life = document.createElement("div");
+    life.value = nbCoup;
     main.appendChild(life);
 
-    createCards();
+    createCards(nbCard);
 
     let nbPlayingCards = document.getElementsByClassName("playingCard");
     let randomColor = shuffle(colorTable);
 
-    for (let i = 0; i < nbPlayingCards.length; i++){
-        life.innerHTML = `Nombre de coups restant : ${nbCoups}`;
+    for (let i = 0; i < nbCard; i++){
+        life.innerHTML = `Nombre de coups restant : ${life.value}`;
         nbPlayingCards[i].addEventListener("click", function() {
-            nbCoups--;
-            life.innerHTML = `Nombre de coups restant : ${nbCoups}`;
+            life.value--;
+            life.innerHTML = `Nombre de coups restant : ${life.value}`;
             this.classList.add(randomColor[i]);
             compareTable.push(randomColor[i]);
             table.push(this);
@@ -234,12 +236,10 @@ function play() {
                 main.style.pointerEvents = "auto";  
                 if (pairs === nbCards/2){
                     endGame("GG, voulez-vous rejouer ?")
-                }else if (nbCoups === 0) {
+                }else if (life.value === 0) {
                     endGame("Dommage voaus avez perdu, voulez-vous rejouer ?")
                 }         
             }, 1000);     
         });
     }
 }
-
-

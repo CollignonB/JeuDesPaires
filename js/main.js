@@ -10,17 +10,119 @@ let colorTable = [
     "colorThree",
     "colorFour",
     "colorFive",
-    "colorSix",
-    "colorOne",
-    "colorTwo",
-    "colorThree",
-    "colorFour",
-    "colorFive",
     "colorSix"
 ];
+let tableToShuffle = [];
 let table = [];
 let pairs = 0;
 
+
+for (let i = 0; i < nbCards/2; i ++){
+    tableToShuffle.push(colorTable[i]);
+    tableToShuffle.push(colorTable[i]);
+}
+
+function diplayDifficultyMenu(){
+
+    let btnStart = document.getElementById("start");
+    btnStart.remove();
+
+    let dRow = document.createElement("div");
+    dRow.classList.add("row");
+    dRow.id="dRow";
+
+    let tittle = document.createElement("h2");
+    tittle.classList.add("text-center", "col-12", "text-danger");
+    tittle.innerText = "Choix de la difficulté";
+
+    dRow.appendChild(tittle);
+    main.appendChild(dRow);
+
+    let form = document.createElement("form");
+
+    let divDiff = document.createElement("div");
+    divDiff.classList.add("col-6");
+    //~~~~~~~~~~~~~~~ first radio button ~~~~~~~~~~~~~~~ 
+    divDiff.innerHTML ='<label class="container" > <input type="radio" name="difficulty" id="easy"> Facile <span class="checkmark" name="difficulty"></span></label>';
+
+    //~~~~~~~~~~~~~~~ second radio button ~~~~~~~~~~~~~~~ 
+    divDiff.innerHTML +='<label class="container"> <input type="radio" name="difficulty"  id="normal" checked="checked"> Normal <span class="checkmark" name="difficulty"></span></label>';
+
+    //~~~~~~~~~~~~~~~ third radio button ~~~~~~~~~~~~~~~ 
+    divDiff.innerHTML +='<label class="container"> <input type="radio" name="difficulty" id="hard"> Difficile <span class="checkmark" name="difficulty"></span></label>';
+
+    //~~~~~~~~~~~~~~~ last radio button ~~~~~~~~~~~~~~~ 
+    divDiff.innerHTML +='<label class="container"> <input type="radio" name="difficulty" id="custom"> Personalisé <span class="checkmark" name="difficulty"></span></label>';
+
+    form.appendChild(divDiff);
+
+    dRow.appendChild(form);
+
+    let divNumber = document.createElement("div");
+    divNumber.classList.add("col-6");
+
+    divNumber.innerHTML = '<div> <label for="#">Nombre de coups</label> <input type="number" class="form-control" id="nbCoups" min="16" max="32"> </div>';
+    divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> </div>';
+    dRow.appendChild(divNumber);
+
+    // document.getElementById("nbCoups").disabled = true;
+    // document.getElementById("nbCards").disabled = true;
+
+    let btn = document.createElement("button");
+    dRow.appendChild(btn);
+    btn.classList.add("btn", "btn-outline-danger", "col-12", "col-sm-10", "col-lg-6");
+    btn.id = "play";
+
+    btn.onclick = play;
+    btn.innerText = "Jouer";
+
+    chooseDifficulty();
+}
+
+function chooseDifficulty(){
+    let easy = document.getElementById("easy");
+    let normal = document.getElementById("normal");
+    let hard = document.getElementById("hard");
+    let custom = document.getElementById("custom");
+
+    let radios = document.getElementsByName("difficulty");
+
+    let nbCoups = document.getElementById("nbCoups");
+    let nbCards = document.getElementById("nbCards");
+
+    console.log(radios);
+
+    for (let radio of radios){
+        radio.addEventListener('click', function(){
+            nbCards.value = "12";
+            nbCoups.value = "20";
+            console.log(this.id);
+        });
+    }
+    // for (let i=0; i<radios.length; i++ ){
+    //     easy.addEventListener('change', function() {
+    //         if(this.checked === true){
+    //             nbCoups.value = 20;
+    //             nbCards.value = 10;
+    //         }else {
+    //             nbCoups.value = 16;
+    //             nbCards.value = 12;
+    //         }
+    //     });
+    //     normal.addEventListener('change', function() {
+    //         if(this.checked === true){
+    //             nbCoups.value = 16;
+    //             nbCards.value = 12;
+    //         }
+    //     });
+    //     hard.addEventListener('change', function(){
+    //         if(this.checked === true){
+    //             nbCoups.value = 16;
+    //             nbCards.value = 14;
+    //         }
+    //     });
+    // }
+}
 function createCards () {
 
     let divRow = document.createElement("div");
@@ -104,8 +206,10 @@ function endGame(msg) {
 
 function play() {
 
-    let startBtn = document.getElementById("start");
+    let startBtn = document.getElementById("play");
     startBtn.remove();
+    let dRow = document.getElementById("dRow");
+    dRow.remove();
     var nbCoups = 20;
     let life = document.createElement("div");
     main.appendChild(life);
@@ -137,3 +241,5 @@ function play() {
         });
     }
 }
+
+

@@ -68,13 +68,7 @@ function diplayDifficultyMenu(){
     btn.id = "play";
     btn.innerText = "Jouer";
 
-    let [nbCard,nbCoup] = chooseDifficulty();
-
-    console.log(nbCard);
-
-    btn.addEventListener("click", function(){
-        play(nbCoup,nbCard);
-    }); 
+    chooseDifficulty();
 }
 
 function chooseDifficulty(){
@@ -83,8 +77,8 @@ function chooseDifficulty(){
     let nbCoups = document.getElementById("nbCoups");
     let nbCards = document.getElementById("nbCards");
 
-    // nbCoups.value = "20";
-    // nbCards.value = "12";
+    nbCoups.value = "20";
+    nbCards.value = "12";
 
     for (let radio of radios){
         radio.addEventListener('click', function(){
@@ -110,12 +104,17 @@ function chooseDifficulty(){
             if(this.id === "custom"){
                 nbCards.disabled = false;
                 nbCoups.disabled = false;
+
             }
-            // console.log("nb cartes diffi choice :" +nbCards.value);
-            // console.log("nb coups diffi choice :" +nbCoups.value);
+
         });
     }
 
+    btnPlay = document.getElementById("play");
+    btnPlay.addEventListener("click", function() {
+        play(nbCoups.value,nbCards.value);
+    })
+    
     return [nbCards.value,nbCoups.value];
 }
 

@@ -10,7 +10,11 @@ let colorTable = [
     "colorThree",
     "colorFour",
     "colorFive",
-    "colorSix"
+    "colorSix",
+    "colorSeven",
+    "colorEight",
+    "colorNine",
+    "colorTen"
 ];
 let tableToShuffle = [];
 let table = [];
@@ -56,7 +60,7 @@ function diplayDifficultyMenu(){
     divNumber.classList.add("col-6");
 
     divNumber.innerHTML = '<div> <label for="#">Nombre de coups</label> <input type="number" class="form-control" id="nbCoups" min="16" max="32"> </div>';
-    divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> </div>';
+    divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> <p id="error"></p> </div>';
     dRow.appendChild(divNumber);
 
     document.getElementById("nbCoups").disabled = true;
@@ -76,6 +80,11 @@ function chooseDifficulty(){
 
     let nbCoups = document.getElementById("nbCoups");
     let nbCards = document.getElementById("nbCards");
+
+    let errorM = document.getElementById("error");
+    errorM.classList.add("text-danger");
+
+    let btnPlay = document.getElementById("play");
 
     nbCoups.value = "20";
     nbCards.value = "12";
@@ -104,13 +113,23 @@ function chooseDifficulty(){
             if(this.id === "custom"){
                 nbCards.disabled = false;
                 nbCoups.disabled = false;
+                btnPlay.disabled = true;
 
+                nbCards.addEventListener("change", function() {
+                    if (nbCards.value %2 !== 0){
+                        errorM.innerText = "veuillez rentrer un nombre de carte paires";
+                        
+                    } else {
+                        errorM.innerText="";
+                        btnPlay.disabled = false;
+                    }
+                });
             }
 
         });
     }
 
-    btnPlay = document.getElementById("play");
+    
     btnPlay.addEventListener("click", function() {
         play(nbCoups.value,nbCards.value);
     })
@@ -130,8 +149,6 @@ function createCards (nbCards) {
         cardC.classList.add("col-3","col-sm-4","col-lg-2");
         let card = document.createElement("div");
         card.classList.add("playingCard","baseColor");
-
-        console.log("je viens de créer "+ i +" cartes")
     
         cardC.appendChild(card);
         divRow.appendChild(cardC);
@@ -217,8 +234,16 @@ function play(nbCoup,nbCard) {
 
     createCards(nbCard);
 
+    let colorTabToShuffle = [];
+
+    for (let i= 0; i < nbCard/2; i ++){
+        colorTabToShuffle.push(colorTable[i]);
+        colorTabToShuffle.push(colorTable[i]);
+    }
+
     let nbPlayingCards = document.getElementsByClassName("playingCard");
-    let randomColor = shuffle(colorTable);
+    let randomColor = shuffle(colorTabToShuffle);
+
 
     for (let i = 0; i < nbCard; i++){
         life.innerHTML = `Nombre de coups restant : ${life.value}`;
@@ -233,7 +258,7 @@ function play(nbCoup,nbCard) {
                 [compareTable,table,pairOfCards] = checkCards(compareTable,table);
                 pairs += pairOfCards;
                 main.style.pointerEvents = "auto";  
-                if (pairs === nbCards/2){
+                if (pairs === nbCard/2){
                     endGame("GG, voulez-vous rejouer ?")
                 }else if (life.value === 0) {
                     endGame("Dommage voaus avez perdu, voulez-vous rejouer ?")

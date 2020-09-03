@@ -20,6 +20,23 @@ let tableToShuffle = [];
 let table = [];
 let pairs = 0;
 
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+
+    this.play = function(){
+        console.log("amp it up");
+        this.sound.play();
+    }
+    this.stop = function() {
+        this.sound.pause();
+    }
+}
+
 function diplayDifficultyMenu(){
 
     let btnStart = document.getElementById("start");
@@ -59,8 +76,8 @@ function diplayDifficultyMenu(){
     let divNumber = document.createElement("div");
     divNumber.classList.add("col-6");
 
-    divNumber.innerHTML = '<div> <label for="#">Nombre de coups</label> <input type="number" class="form-control" id="nbCoups" min="16" max="32"> </div>';
-    divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> <p id="error"></p> </div>';
+    divNumber.innerHTML = '<div> <label for="#">Nombre de coups</label> <input type="number" class="form-control" id="nbCoups" min="14" max="32"> <p id="errorCoups"></p> </div>';
+    divNumber.innerHTML += '<div> <label for="#">Nombre de cartes</label> <input type="number" class="form-control" id="nbCards" min="10" max="20"> </div> <p id="errorCards"></p> </div>';
     dRow.appendChild(divNumber);
 
     document.getElementById("nbCoups").disabled = true;
@@ -81,8 +98,11 @@ function chooseDifficulty(){
     let nbCoups = document.getElementById("nbCoups");
     let nbCards = document.getElementById("nbCards");
 
-    let errorM = document.getElementById("error");
-    errorM.classList.add("text-danger");
+    let errorCards = document.getElementById("errorCards");
+    let errorCoups = document.getElementById("errorCoups");
+
+    errorCards.classList.add("text-danger");
+    errorCoups.classList.add("text-danger");
 
     let btnPlay = document.getElementById("play");
 
@@ -117,10 +137,19 @@ function chooseDifficulty(){
 
                 nbCards.addEventListener("change", function() {
                     if (nbCards.value %2 !== 0){
-                        errorM.innerText = "veuillez rentrer un nombre de carte paires";
+                        errorCards.innerText = "veuillez rentrer un nombre de carte paires (entre 10 et 20)";
                         
                     } else {
-                        errorM.innerText="";
+                        errorCards.innerText="";
+                        btnPlay.disabled = false;
+                    }
+                });
+
+                nbCoups.addEventListener("change", function(){
+                    if(nbCoups.value < 14 || nbCoups.value > 32){
+                        errorCoups.innerText = "veuillez rentrer un nombre de coups compris entre 14 et 32";
+                    }else {
+                        errorCoups.innerText = "";
                         btnPlay.disabled = false;
                     }
                 });
@@ -139,7 +168,6 @@ function chooseDifficulty(){
 
 function createCards (nbCards) {
 
-    console.log("je vais créé les cartes");
     let divRow = document.createElement("div");
     divRow.classList.add("row");
     main.appendChild(divRow);
@@ -153,7 +181,6 @@ function createCards (nbCards) {
         cardC.appendChild(card);
         divRow.appendChild(cardC);
     }
-    console.log("j'ai créé les cartes");
 }
 
 function shuffle(tab) {
@@ -222,16 +249,16 @@ function endGame(msg) {
 
 function play(nbCoup,nbCard) {
 
-    console.log("nombre de coups : "+nbCoup);
-    console.log("nombre de cartes : "+nbCard);
     let startBtn = document.getElementById("play");
     startBtn.remove();
     let dRow = document.getElementById("dRow");
     dRow.remove();
     let life = document.createElement("div");
     life.value = nbCoup;
-    main.appendChild(life);
 
+    let looseSound = new sound("sound/super-mario-dies-sound-effect.mp3");
+
+    main.appendChild(life);
     createCards(nbCard);
 
     let colorTabToShuffle = [];
@@ -261,7 +288,11 @@ function play(nbCoup,nbCard) {
                 if (pairs === nbCard/2){
                     endGame("GG, voulez-vous rejouer ?")
                 }else if (life.value === 0) {
-                    endGame("Dommage voaus avez perdu, voulez-vous rejouer ?")
+                    looseSound.play();
+                    setTimeout(function() {
+                        endGame("Dommage voaus avez perdu, voulez-vous rejouer ?");
+                    }, 2000)
+                    
                 }         
             }, 1000);     
         });

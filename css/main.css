@@ -127,24 +127,25 @@ textarea {
      animation: moveCSix 1s;
    }
 
-   /* .colorOne.clicked {
-     transition: background-color 1000ms ease-in;
+   .colorSeven{
+     background-color: aqua;
+     animation: moveCSeven 1s ;
    }
-   .colorTwo.clicked {
-    transition: background-color 1000ms ease-in;
-  }
-  .colorThree.clicked {
-    transition: background-color 1000ms ease-in;
-  }
-  .colorFour.clicked {
-    transition: background-color 1000ms ease-in;
-  }
-  .colorFive.clicked {
-    transition: background-color 1000ms ease-in;
-  }
-  .colorSix.clicked {
-    transition: background-color 1000ms ease-in;
-  } */
+
+   .colorEight{
+     background-color: chartreuse;
+     animation: moveCEight 1s;
+   }
+
+   .colorNine{
+     background-color: deeppink;
+     animation: moveCNine 1s;
+   }
+
+   .colorTen{
+     background-color: salmon;
+     animation: moveCTen 1s;
+   }
 
   @keyframes mymove {
     from {background-color: white;}
@@ -174,6 +175,22 @@ textarea {
   @keyframes moveCSix {
     from {background-color: crimson;}
     to {background-color: yellow;}
+  }
+  @keyframes moveCSeven {
+    from {background-color: crimson;}
+    to {background-color: aqua;}
+  }
+  @keyframes moveCEight {
+    from {background-color: crimson;}
+    to {background-color: chartreuse;}
+  }
+  @keyframes moveCNine {
+    from {background-color: crimson;}
+    to {background-color: deeppink;}
+  }
+  @keyframes moveCTen {
+    from {background-color: crimson;}
+    to {background-color: salmon;}
   }
 /* ==========================================================================
    Helper classes

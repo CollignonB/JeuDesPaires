@@ -29,7 +29,6 @@ function sound(src) {
     document.body.appendChild(this.sound);
 
     this.play = function(){
-        console.log("amp it up");
         this.sound.play();
     }
     this.stop = function() {
@@ -221,6 +220,7 @@ function stopGame(errorText) {
 
 function checkCards (compareTable, table) {
     let pairOfCards = 0;
+    let pairSound = new sound("sound/super-mario-bros-coin-sound-effect.mp3");
     if (compareTable.length === 2 ){
         if(table[0] === table[1]){
             stopGame("ne cliquez pas deux foissur le même carte svp");
@@ -230,6 +230,7 @@ function checkCards (compareTable, table) {
                 resetCard(table);
             } else {
                 pairOfCards ++;
+                pairSound.play();
             }
         }
         compareTable = [];
@@ -257,6 +258,7 @@ function play(nbCoup,nbCard) {
     life.value = nbCoup;
 
     let looseSound = new sound("sound/super-mario-dies-sound-effect.mp3");
+    let winSound = new sound("sound/stage-win-super-mario-sound-effect-hd.mp3");
 
     main.appendChild(life);
     createCards(nbCard);
@@ -286,7 +288,10 @@ function play(nbCoup,nbCard) {
                 pairs += pairOfCards;
                 main.style.pointerEvents = "auto";  
                 if (pairs === nbCard/2){
-                    endGame("GG, voulez-vous rejouer ?")
+                    winSound.play();
+                    setTimeout(function() {
+                        endGame("GG, voulez-vous rejouer ?");
+                    }, 1000)
                 }else if (life.value === 0) {
                     looseSound.play();
                     setTimeout(function() {
